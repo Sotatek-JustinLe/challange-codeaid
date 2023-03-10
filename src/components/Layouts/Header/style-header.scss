@@ -1,0 +1,37 @@
+@import "src/assets/scss/responsive.scss";
+
+.header-wrapper {
+  background: #025feb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  font-size: 1rem;
+  color: #ffffff;
+  padding: 0 40px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+
+  &__left {
+  }
+
+  &__right {
+    display: flex;
+
+    .link {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      img {
+        width: 25px;
+        margin-right: 5px;
+      }
+
+      &:first-child {
+        margin-right: 40px;
+      }
+    }
+  }
+}

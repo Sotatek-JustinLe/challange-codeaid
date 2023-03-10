@@ -1,7 +1,8 @@
-import SchedulePage from './components/SchedulePage/index';
-import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
-import NotFound from './components/404/index';
-import LeaderBoardPage from './components/LeaderBoardPage/index';
+import { Route, Switch, useHistory, useLocation } from "react-router-dom";
+import NotFound from "./components/404/index";
+import Layout from "./components/Layouts";
+import LeaderBoardPage from "./components/LeaderBoardPage/index";
+import SchedulePage from "./components/SchedulePage/index";
 // import LeagueService from './services/LeagueService.js';
 // import { useEffect } from 'react';
 
@@ -10,8 +11,8 @@ function App() {
 
   const location = useLocation();
   const history = useHistory();
-  if (location.pathname === '/') {
-    history.push('/schedule');
+  if (location.pathname === "/") {
+    history.push("/schedule");
   }
 
   // useEffect(() => {
@@ -21,17 +22,19 @@ function App() {
 
   return (
     <div>
-      <Switch>
-        <Route path="/schedule">
-          <SchedulePage />
-        </Route>
-        <Route path="/leaderboard">
-          <LeaderBoardPage />
-        </Route>
-        <Route path="*">
-          <NotFound />
-        </Route>
-      </Switch>
+      <Layout>
+        <Switch>
+          <Route path="/schedule">
+            <SchedulePage />
+          </Route>
+          <Route path="/leaderboard">
+            <LeaderBoardPage />
+          </Route>
+          <Route path="*">
+            <NotFound />
+          </Route>
+        </Switch>
+      </Layout>
     </div>
   );
 }

@@ -1,17 +1,4 @@
-$mobile-screen: 500px;
-$desktop-screen: 750px;
-
-@mixin tablet {
-  @media (min-width: #{$mobile-screen}) and (max-width: #{$desktop-screen + 1}) {
-    @content;
-  }
-}
-
-@mixin mobile {
-  @media (max-width: #{$mobile-screen}) {
-    @content;
-  }
-}
+@import "src/assets/scss/responsive.scss";
 
 .leaderboard-page-wrapper {
   &__title {
