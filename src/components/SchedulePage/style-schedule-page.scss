@@ -1,0 +1,149 @@
+$mobile-screen: 500px;
+$desktop-screen: 750px;
+
+@mixin tablet {
+  @media (min-width: #{$mobile-screen}) and (max-width: #{$desktop-screen + 1}) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: #{$mobile-screen}) {
+    @content;
+  }
+}
+
+.schedule-page-wrapper {
+  &__title {
+    font-size: 1.5rem;
+    color: #182c62;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  &__table {
+    margin-top: 20px;
+    color: #4b5c68;
+    font-size: 0.875rem;
+
+    .country_name {
+    }
+
+    .flag {
+      margin-left: 20px;
+
+      img {
+        width: 53px;
+        height: 37px;
+      }
+    }
+
+    .font-bold {
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    .away-team {
+      .flag {
+        margin: 0 20px 0 0;
+      }
+    }
+
+    .row {
+      height: 70px;
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+
+      &:nth-child(odd) {
+        background: #f6f7f7;
+      }
+
+      .col {
+        display: flex;
+
+        &_1 {
+          justify-content: flex-end;
+          align-items: center;
+          grid-column: span 1 / span 1;
+        }
+
+        &_2 {
+          align-items: center;
+          grid-column: span 4 / span 4;
+          margin-left: 40px;
+        }
+
+        &_3 {
+          justify-content: end;
+          align-items: center;
+          grid-column: span 3 / span 3;
+        }
+
+        &_4 {
+          justify-content: center;
+          align-items: center;
+          grid-column: span 1 / span 1;
+        }
+
+        &_5 {
+          align-items: center;
+          grid-column: span 3 / span 3;
+        }
+
+        &--vertical {
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-end;
+        }
+      }
+
+      @include tablet() {
+        .col {
+          &_1 {
+            grid-column: span 2 / span 2;
+          }
+
+          &_2 {
+            display: none;
+          }
+
+          &_4 {
+            grid-column: span 2 / span 2;
+          }
+
+          &_3,
+          &_5 {
+            grid-column: span 4 / span 4;
+          }
+        }
+      }
+
+      @include mobile() {
+        .col {
+          &_1,
+          &_2 {
+            display: none;
+          }
+
+          &_4 {
+            grid-column: span 2 / span 2;
+          }
+
+          &_3,
+          &_5 {
+            grid-column: span 5 / span 5;
+          }
+        }
+      }
+    }
+
+    .row--header {
+      height: 40px;
+      background: #e4edf2 !important;
+
+      .col {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}

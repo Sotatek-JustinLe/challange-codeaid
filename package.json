@@ -21,7 +21,8 @@
     "web-vitals": "^2.1.4",
     "axios": "^0.21.1",
     "json-fake-server": "^0.0.2",
-    "serve": "^13.0.2"
+    "serve": "^13.0.2",
+    "sass": "^1.58.3"
   },
   "scripts": {
     "start": "node src/_.mjs & react-scripts start",

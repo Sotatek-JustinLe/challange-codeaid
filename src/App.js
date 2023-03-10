@@ -1,16 +1,37 @@
-
-import style from "./App.module.css";
+import SchedulePage from './components/SchedulePage/index';
+import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
+import NotFound from './components/404/index';
+import LeaderBoardPage from './components/LeaderBoardPage/index';
+// import LeagueService from './services/LeagueService.js';
+// import { useEffect } from 'react';
 
 function App() {
+  // const leagueService = new LeagueService();
+
+  const location = useLocation();
+  const history = useHistory();
+  if (location.pathname === '/') {
+    history.push('/schedule');
+  }
+
+  // useEffect(() => {
+  //   const data = leagueService.getMatches();
+  //   console.log('data: ', data);
+  // }, []);
+
   return (
-    <div className={style.welcomeMessage}>
-      Hi there 👋, <br /><br />      
-      Welcome to your test task. <br /><br />
-      Before you begin make sure to read the README file from the repository to make sure that your environment is properly set up. <br /><br />
-      Also please make sure to read the challenge instructions carefully. We advice that you push your source code to the repository frequently to avoid any loss of work.<br />
-      Once you are ready to submit the work, just go back to the challenge instructions page and click the "Submit Challenge" button.<br /><br />      
-      Good Luck and Have Fun! 🤞<br /><br /><br /><br />
-      <em><strong>NOTE:</strong> This page is only a welcome message and you should overwrite this page with the actuall solution implementation.</em>
+    <div>
+      <Switch>
+        <Route path="/schedule">
+          <SchedulePage />
+        </Route>
+        <Route path="/leaderboard">
+          <LeaderBoardPage />
+        </Route>
+        <Route path="*">
+          <NotFound />
+        </Route>
+      </Switch>
     </div>
   );
 }
