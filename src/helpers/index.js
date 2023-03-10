@@ -1,4 +1,12 @@
 import * as flag from '../assets';
+
+export const convertTimeToDay = (number) =>
+  `${new Date(number).getMonth()}.${new Date(number).getDate()}.${new Date(
+    number
+  ).getYear()}`;
+export const convertTimeToHourMins = (number) =>
+  `${new Date(number).getHours()}:${new Date(number).getMinutes()}`;
+
 export const countries = [
   {
     name: 'Brazil',
@@ -23,15 +31,6 @@ export const findFlagofCountries = (countryName) => {
   return res ? res.flafUrl : '';
 };
 
-const matches1 = [
-  { homeTeam: 'Team A', awayTeam: 'Team B', homeScore: 2, awayScore: 1 },
-  { homeTeam: 'Team C', awayTeam: 'Team D', homeScore: 0, awayScore: 0 },
-  { homeTeam: 'Team B', awayTeam: 'Team C', homeScore: 1, awayScore: 3 },
-  { homeTeam: 'Team D', awayTeam: 'Team A', homeScore: 1, awayScore: 2 },
-  { homeTeam: 'Team A', awayTeam: 'Team C', homeScore: 3, awayScore: 1 },
-  { homeTeam: 'Team D', awayTeam: 'Team B', homeScore: 2, awayScore: 0 },
-];
-
 export const sortLeaderBoard = (matches) => {
   const points = {};
   for (const match of matches) {
@@ -54,50 +53,39 @@ export const sortLeaderBoard = (matches) => {
     const teamObj = {
       name: team,
       points: points[team],
-      goalDiff: 0,
-      goalsScored: 0,
+      goalsDiff: 0,
+      goalsFor: 0,
     };
     for (const match of matches) {
       if (match.homeTeam === team) {
-        teamObj.goalDiff += match.homeTeamScore - match.awayTeamScore;
-        teamObj.goalsScored += match.homeTeamScore;
+        teamObj.goalsDiff += match.homeTeamScore - match.awayTeamScore;
+        teamObj.goalsFor += match.homeTeamScore;
       } else if (match.awayTeam === team) {
-        teamObj.goalDiff += match.awayTeamScore - match.homeTeamScore;
-        teamObj.goalsScored += match.awayTeamScore;
+        teamObj.goalsDiff += match.awayTeamScore - match.homeTeamScore;
+        teamObj.goalsFor += match.awayTeamScore;
       }
     }
     teams.push(teamObj);
   }
 
-  // Sort the teams by their total number of points
-  teams.sort((a, b) => b.points - a.points);
-
-  // Sort teams with same number of points based on head-to-head results
-  for (let i = 0; i < teams.length - 1; i++) {
-    if (teams[i].points === teams[i + 1].points) {
-      const miniLeaderboard = teams.slice(i, i + 2).sort((a, b) => {
-        if (a.name === teams[i].name) {
-          return -1;
-        } else if (b.name === teams[i].name) {
-          return 1;
-        } else {
-          return b.points - a.points;
-        }
-      });
-      teams.splice(i, 2, ...miniLeaderboard);
+  const res = teams.map((i) => {
+    return {
+      ...i,
+      goalsAgainst: i.goalsFor - i.goalsDiff,
+      numberOfMatchPlayed: matches.filter(
+        (item) =>
+          (i.name === item.homeTeam || i.name === item.awayTeam) &&
+          item.matchPlayed
+      ).length,
+    };
+  });
+  const sortPoint = res.sort((a, b) => b.points - a.points);
+  const sortGoalsDiff = sortPoint.sort((a, b) => b.goalsDiff - a.goalsDiff);
+  const sortGoalsFor = sortGoalsDiff.sort((a, b) => {
+    if (a.goalsFor === b.goalsFor) {
+      return a.name.localeCompare(b.name);
     }
-  }
-
-  // Sort teams with same number of points based on goal difference
-  for (let i = 0; i < teams.length - 1; i++) {
-    if (
-      teams[i].points === teams[i + 1].points &&
-      teams[i].goalDiff < teams[i + 1].goalDiff
-    ) {
-      [teams[i], teams[i + 1]] = [teams[i + 1], teams[i]];
-      i = -1;
-    }
-  }
-
-  return teams;
+    return b.goalsFor - a.goalsFor;
+  });
+  return sortGoalsFor;
 };

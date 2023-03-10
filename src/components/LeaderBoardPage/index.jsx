@@ -1,6 +1,8 @@
 import React, { useState, useLayoutEffect } from 'react';
+import { findFlagofCountries } from '../../helpers';
 import './style-leaderboard-page.scss';
 import LeagueService from '../../services/LeagueService';
+import { sortLeaderBoard } from '../../helpers/index';
 
 const Title = () => {
   return (
@@ -8,7 +10,7 @@ const Title = () => {
   );
 };
 
-const Table = () => {
+const Table = ({ leaderBoard }) => {
   const RowHeader = () => {
     return (
       <div className="row row--header">
@@ -22,20 +24,22 @@ const Table = () => {
     );
   };
 
-  const Row = () => {
+  const Row = ({ leaderBoardItem }) => {
     return (
       <div className="row">
         <div className="col col_1 font-bold">
           <div className="flag">
-            <img src={'/vietnam.png'} alt="" />
+            <img src={findFlagofCountries(leaderBoardItem.name)} alt="" />
           </div>
-          <div className="country_name">VietNam</div>
+          <div className="country_name">{leaderBoardItem.name}</div>
         </div>
-        <div className="col col_2">3</div>
-        <div className="col col_3">8</div>
-        <div className="col col_3-4">-1</div>
-        <div className="col col_4">4</div>
-        <div className="col col_5 font-bold font-bold--blue">7</div>
+        <div className="col col_2">{leaderBoardItem.numberOfMatchPlayed}</div>
+        <div className="col col_3">{leaderBoardItem.goalsFor}</div>
+        <div className="col col_3-4">{leaderBoardItem.goalsDiff}</div>
+        <div className="col col_4">{leaderBoardItem.goalsAgainst}</div>
+        <div className="col col_5 font-bold font-bold--blue">
+          {leaderBoardItem.points}
+        </div>
       </div>
     );
   };
@@ -43,31 +47,28 @@ const Table = () => {
   return (
     <div className="leaderboard-page-wrapper__table">
       <RowHeader />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
+      {leaderBoard.map((item, index) => (
+        <Row leaderBoardItem={item} key={index} />
+      ))}
     </div>
   );
 };
 
 const LeaderBoardPage = () => {
   const [leaderBoard, setLeaderBoard] = useState([]);
-  const leagueService = new LeagueService();
+  const leagueService = LeagueService.getInstance();
 
   useLayoutEffect(() => {
     (async () => {
       await leagueService.fetchData();
-      console.log(leagueService.getMatches());
+      setLeaderBoard(sortLeaderBoard(leagueService.getMatches()));
     })();
   }, []);
 
   return (
     <div className="leaderboard-page-wrapper">
       <Title />
-      <Table />
+      <Table leaderBoard={leaderBoard} />
     </div>
   );
 };

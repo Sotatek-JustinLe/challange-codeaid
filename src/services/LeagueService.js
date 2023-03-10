@@ -1,4 +1,5 @@
 import axiosInstance from '../axios';
+import { sortLeaderBoard } from '../helpers/index';
 
 /**
  * A class representing a service that processes the data for match schedule
@@ -11,6 +12,15 @@ import axiosInstance from '../axios';
 class LeagueService {
   allMatches = [];
   leaderBoard = [];
+
+  static getInstance() {
+    if (!LeagueService.instance) {
+      LeagueService.instance = new LeagueService();
+    }
+
+    return LeagueService.instance;
+  }
+
   /**
    * Sets the match schedule.
    * Match schedule will be given in the following form:
@@ -37,8 +47,8 @@ class LeagueService {
    *
    * @param {Array} matches List of matches.
    */
-  setMatches(matches) {
-    this.allMatches = this.allMatches.concat(matches);
+  setMatches(match) {
+    this.allMatches = [...this.allMatches, match];
   }
 
   /**
@@ -66,7 +76,8 @@ class LeagueService {
    * @returns {Array} List of teams representing the leaderboard.
    */
   getLeaderboard() {
-    return this.leaderboard;
+    this.leaderBoard = sortLeaderBoard(this.allMatches);
+    return this.leaderBoard;
   }
 
   /**
@@ -75,7 +86,7 @@ class LeagueService {
   async fetchData() {
     const rs = await axiosInstance.get('/getAllMatches');
     if (rs && rs.matches && rs.matches) {
-      return (this.allMatches = rs.matches);
+      this.allMatches = rs.matches;
     }
   }
 }
