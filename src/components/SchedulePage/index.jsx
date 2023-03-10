@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import * as img from '../../assets';
-import "./style-schedule-page.scss";
+import './style-schedule-page.scss';
+import LeagueService from '../../services/LeagueService';
 
 const Title = () => {
   return <div className="schedule-page-wrapper__title">League Schedule</div>;
@@ -57,6 +59,13 @@ const Table = () => {
 };
 
 const SchedulePage = () => {
+  const leagueService = new LeagueService();
+  useEffect(() => {
+    (async () => {
+      await leagueService.fetchData();
+      console.log(leagueService.getMatches());
+    })();
+  }, []);
   return (
     <div className="schedule-page-wrapper">
       <Title />

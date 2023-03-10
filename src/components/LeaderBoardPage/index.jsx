@@ -1,4 +1,6 @@
-import "./style-leaderboard-page.scss";
+import React, { useState, useLayoutEffect } from 'react';
+import './style-leaderboard-page.scss';
+import LeagueService from '../../services/LeagueService';
 
 const Title = () => {
   return (
@@ -25,7 +27,7 @@ const Table = () => {
       <div className="row">
         <div className="col col_1 font-bold">
           <div className="flag">
-            <img src={"/vietnam.png"} alt="" />
+            <img src={'/vietnam.png'} alt="" />
           </div>
           <div className="country_name">VietNam</div>
         </div>
@@ -52,6 +54,16 @@ const Table = () => {
 };
 
 const LeaderBoardPage = () => {
+  const [leaderBoard, setLeaderBoard] = useState([]);
+  const leagueService = new LeagueService();
+
+  useLayoutEffect(() => {
+    (async () => {
+      await leagueService.fetchData();
+      console.log(leagueService.getMatches());
+    })();
+  }, []);
+
   return (
     <div className="leaderboard-page-wrapper">
       <Title />

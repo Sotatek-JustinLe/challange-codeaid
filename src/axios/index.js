@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_API_URL = 'http://localhots:3001';
+const BASE_API_URL = 'http://localhost:3001';
 const API_VERSION = 'api/v1';
 
 const axiosInstance = axios.create({
@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
     responseType: 'json',
-    timeout: 1000,
+    timeout: 5000,
   },
 });
 
@@ -21,12 +21,13 @@ axiosInstance.interceptors.request.use(
         `${BASE_API_URL}/${API_VERSION}/getAccessToken`
       );
 
-      if (res && res.accessToken) {
-        localStorage.setItem('access_token', JSON.stringify(res.accessToken));
-        accessToken = res.accessToken;
-        config.headers['Authorization'] = `Bearer ${accessToken}`;
+      if (res && res.data.access_token) {
+        localStorage.setItem('access_token', res.data.access_token);
+        accessToken = res.data.access_token;
       }
     }
+
+    config.headers['Authorization'] = `Bearer ${accessToken}`;
 
     return config;
   },
@@ -35,7 +36,6 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   async (response) => {
-    console.log('response: ', response);
     if (response && response.data) {
       return response.data;
     }
